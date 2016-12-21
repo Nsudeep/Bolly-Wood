@@ -10,10 +10,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.util.Log;
 
+import java.util.Random;
+
 public class giveMovie extends AppCompatActivity {
 
     private static final String TAG = "giveMovieLogs";
-    private String movieName = "ek aur ek gyarah";
+    //private String movieName = "ek aur ek gyarah";
+    private String movieName;
+    String[] movieArray = {"ek aur ek gyarah","godfather","the shining"};
     private TextView displayMaskedMovieName;
     private TextView promptNextGuess;
     private TextView numGuessesRemaining;
@@ -21,7 +25,8 @@ public class giveMovie extends AppCompatActivity {
     private TextView guessesMade;
     private EditText playerGuess;
     private Button enterGuess;
-    private String guessedLetters = "aeiou";
+    //private String guessedLetters = "aeiou";
+    private String guessedLetters = "AEIOU";
     private String guessesMadeString = "Guesses made: ";
     private int valueGuessRemaining = 10;
     @Override
@@ -33,6 +38,8 @@ public class giveMovie extends AppCompatActivity {
 
         // Text View - Masked Movie name.
         //TextView displayMaskedMovieName = new TextView(this);
+        int rnd = new Random().nextInt(movieArray.length);
+        movieName = movieArray[rnd].toUpperCase();
         displayMaskedMovieName = new TextView(this);
         String maskedMovieName = maskMovieName(movieName, guessedLetters);
         displayMaskedMovieName.setText(maskedMovieName);
@@ -42,7 +49,7 @@ public class giveMovie extends AppCompatActivity {
         // Edit Text - User guess.
         //EditText playerGuess = new EditText(this);
         playerGuess = new EditText(this);
-        playerGuess.setTextSize(22);
+        //playerGuess.setTextSize(22);
         InputFilter[] charFilter = new InputFilter[1];
         charFilter[0] = new InputFilter.LengthFilter(1);
         playerGuess.setFilters(charFilter);
@@ -61,6 +68,7 @@ public class giveMovie extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 char playerGuessValue = playerGuess.getText().toString().charAt(0);
+                playerGuessValue = Character.toUpperCase(playerGuessValue);
                 if(guessedLetters.indexOf(playerGuessValue)!=-1)
                     return;
                 guessedLetters = guessedLetters + playerGuessValue;
