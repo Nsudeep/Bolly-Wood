@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.EditText;
@@ -27,7 +28,8 @@ public class giveMovie extends AppCompatActivity {
     private Button enterGuess;
     //private String guessedLetters = "aeiou";
     private String guessedLetters = "AEIOU";
-    private String guessesMadeString = "Guesses made: ";
+    //private String guessesMadeString = "Guesses made: ";
+    private String guessesMadeString = "Incorrect Guesses:";
     private int valueGuessRemaining = 10;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,12 @@ public class giveMovie extends AppCompatActivity {
         promptNextGuess.setTextSize(22);
         promptNextGuess.setId(3);
 
+        // Text View - Guesse Made
+        guessesMade = new TextView(this);
+        guessesMade.setText(guessesMadeString);
+        guessesMade.setId(6);
+
+
         // Button - Enter the guess.
         enterGuess = new Button(this);
         enterGuess.setOnClickListener(new View.OnClickListener() {
@@ -69,19 +77,28 @@ public class giveMovie extends AppCompatActivity {
             public void onClick(View v) {
                 char playerGuessValue = playerGuess.getText().toString().charAt(0);
                 playerGuessValue = Character.toUpperCase(playerGuessValue);
-                if(guessedLetters.indexOf(playerGuessValue)!=-1)
+                if(guessedLetters.indexOf(playerGuessValue)!=-1) {
+                    playerGuess.setText("");
+                    InputMethodManager imm = (InputMethodManager) getSystemService(giveMovie.INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                     return;
+                }
                 guessedLetters = guessedLetters + playerGuessValue;
-                guessesMadeString = guessesMadeString + playerGuessValue;
+                //guessesMadeString = guessesMadeString + playerGuessValue;
                 guessesMade.setText(guessesMadeString);
                 if(movieName.indexOf(playerGuessValue) == -1) {
                     valueGuessRemaining--;
+                    guessesMadeString = guessesMadeString + playerGuessValue;
+                    guessesMade.setText(guessesMadeString);
                     numGuessesRemaining.setText(String.valueOf(valueGuessRemaining));
                 }
                 else {
                     String maskedMovieName = maskMovieName(movieName, guessedLetters);
                     displayMaskedMovieName.setText(maskedMovieName);
                 }
+                playerGuess.setText("");
+                InputMethodManager imm = (InputMethodManager) getSystemService(giveMovie.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
             }
         });
         enterGuess.setText("Enter");
@@ -94,10 +111,7 @@ public class giveMovie extends AppCompatActivity {
         numGuessesRemaining.setText(String.valueOf(valueGuessRemaining));
         numGuessesRemaining.setId(5);
 
-        // Text View - Guesse Made
-        guessesMade = new TextView(this);
-        guessesMade.setText(guessesMadeString);
-        guessesMade.setId(6);
+
 
         // Add rules.
         // tex View - masked movie name.
