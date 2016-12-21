@@ -2,6 +2,7 @@ package com.example.tejas.bolly_wood;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -39,6 +40,13 @@ public class giveMovie extends AppCompatActivity {
     private String guessesMadeString = "Incorrect Guesses:";
     private int valueGuessRemaining = 10;
     private int score = 0;
+
+
+    public void userMovieInput(View v) {
+        Log.i(TAG, "Inside UserMovieInput().");
+        Intent intent = new Intent(this, userInputActivity.class);
+        startActivity(intent);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,12 +97,12 @@ public class giveMovie extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(giveMovie.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);// to hide the keyboard
                 char playerGuessValue = playerGuess.getText().toString().charAt(0);
                 playerGuessValue = Character.toUpperCase(playerGuessValue);
                 if(guessedLetters.indexOf(playerGuessValue)!=-1) {
                     playerGuess.setText("");
-                    InputMethodManager imm = (InputMethodManager) getSystemService(giveMovie.INPUT_METHOD_SERVICE);
+                    imm = (InputMethodManager) getSystemService(giveMovie.INPUT_METHOD_SERVICE);
                     imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                     return;
                 }
@@ -106,6 +114,7 @@ public class giveMovie extends AppCompatActivity {
                     guessesMadeString = guessesMadeString + playerGuessValue;
                     guessesMade.setText(guessesMadeString);
                     numGuessesRemaining.setText(String.valueOf(valueGuessRemaining));
+
                 }
                 else {
                     String maskedMovieName = maskMovieName(movieName, guessedLetters);
@@ -114,17 +123,23 @@ public class giveMovie extends AppCompatActivity {
                         successMessage.setText(R.string.successMessage);
                         proceed.setVisibility(View.VISIBLE);
                         score++;
-                        scoreView.setText(String.valueOf(score));
+                        scoreView.setText(String.valueOf(score));;
                     }
                     displayMaskedMovieName.setText(maskedMovieName);
+
                 }
-                playerGuess.setText("");
-                InputMethodManager imm = (InputMethodManager) getSystemService(giveMovie.INPUT_METHOD_SERVICE);
+                imm = (InputMethodManager) getSystemService(giveMovie.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                playerGuess.setText("");
             }
         });
 
-
+        proceed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userMovieInput(v);
+            }
+        });
 
         enterGuess.setText("Enter");
         proceed.setText("PROCEED");
