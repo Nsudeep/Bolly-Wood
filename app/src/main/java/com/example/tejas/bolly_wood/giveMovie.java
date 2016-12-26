@@ -22,7 +22,7 @@ public class giveMovie extends AppCompatActivity {
     private static final String TAG = "giveMovieLogs";
     //private String movieName = "ek aur ek gyarah";
     private String movieName;
-    String[] movieArray = {"ek aur ek gyarah","godfather","the shining","psycho","apocalypse now"};
+    String[] movieArray = {"ek aur ek gyarah","godfather","the shining","psycho","apocalypse now","Apollo 13"};
     private TextView displayMaskedMovieName;
     private TextView promptNextGuess;
     private TextView numGuessesRemaining;
@@ -253,7 +253,8 @@ public class giveMovie extends AppCompatActivity {
         proceedDetails.addRule(RelativeLayout.RIGHT_OF, successMessage.getId());
         proceedDetails.addRule(RelativeLayout.CENTER_HORIZONTAL);
         giveMovieLayout.addView(proceed, proceedDetails);
-        proceed.setVisibility(View.INVISIBLE);
+        //proceed.setVisibility(View.INVISIBLE);
+        proceed.setVisibility(View.VISIBLE);
     }
     protected String maskMovieName(String movieName, String guessedLetters) {
         String maskedName = "";
