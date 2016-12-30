@@ -78,14 +78,11 @@ public class userInputActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String input = userPositionInput.getText().toString();
-                System.out.println("input is " + input.charAt(0));
                 String[] strArr = input.split(",");
-                System.out.println("gfhf" + strArr[0]);
                 int len = strArr.length;
                 int[] intArray = new int[len];
                 int num, flag=0;
-                System.out.println("The 0thcharacter is");
-                System.out.println(strArr[0].charAt(0));
+
                 if((strArr[0].charAt(0) == 'N') || (strArr[0].charAt(0) == 'n'))
                 {
                     flag = 1;
@@ -93,6 +90,7 @@ public class userInputActivity extends AppCompatActivity {
                     guessesMadeString += incorrectGuess;
                     incorrectGuesses.setText(guessesMadeString);
                 }
+
                 for(int i = 0; i < len && flag== 0; i++) {
 
                     intArray[i] = Integer.parseInt(strArr[i]);
