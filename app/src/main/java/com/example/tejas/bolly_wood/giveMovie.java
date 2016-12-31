@@ -25,10 +25,10 @@ public class giveMovie extends AppCompatActivity {
     String[] movieArray = {"ek aur ek gyarah","godfather","the shining","psycho","apocalypse now","Apollo 13"};
     private TextView displayMaskedMovieName;
     private TextView promptNextGuess;
-    private TextView numGuessesRemaining;
+    //private TextView numGuessesRemaining;
     private TextView guessesRemaining;
     private TextView guessesMade;
-    private TextView scoreView;
+    //private TextView scoreView;
     private TextView scoreLabel;
     private TextView successMessage;
     private EditText playerGuess;
@@ -85,12 +85,13 @@ public class giveMovie extends AppCompatActivity {
         guessesMade.setText(guessesMadeString);
         guessesMade.setId(6);
 
-        scoreView = new TextView(this);
-        scoreView.setText(String.valueOf(score));
-        scoreView.setId(8);
+        //scoreView = new TextView(this);
+        //scoreView.setText(String.valueOf(score));
+        //scoreView.setId(9);
         successMessage = new TextView(this);
 
         proceed = new Button(this);
+        proceed.setId(10);
         // Button - Enter the guess.
         enterGuess = new Button(this);
         enterGuess.setOnClickListener(new View.OnClickListener() {
@@ -113,7 +114,7 @@ public class giveMovie extends AppCompatActivity {
                     valueGuessRemaining--;
                     guessesMadeString = guessesMadeString + playerGuessValue;
                     guessesMade.setText(guessesMadeString);
-                    numGuessesRemaining.setText(String.valueOf(valueGuessRemaining));
+                    guessesRemaining.setText("Guesses Remaining: " + String.valueOf(valueGuessRemaining));
 
                 }
                 else {
@@ -123,7 +124,7 @@ public class giveMovie extends AppCompatActivity {
                         successMessage.setText(R.string.successMessage);
                         proceed.setVisibility(View.VISIBLE);
                         score++;
-                        scoreView.setText(String.valueOf(score));;
+                        scoreLabel.setText("Score: " + String.valueOf(score));
                     }
                     displayMaskedMovieName.setText(maskedMovieName);
 
@@ -145,11 +146,11 @@ public class giveMovie extends AppCompatActivity {
         proceed.setText("PROCEED");
         // Text View - Number of Guesses Remaining
         guessesRemaining = new TextView(this);
-        guessesRemaining.setText("Number of Guesses Remaining");
+        guessesRemaining.setText("Guesses Remaining: 10");
         guessesRemaining.setId(4);
-        numGuessesRemaining = new TextView(this);
-        numGuessesRemaining.setText(String.valueOf(valueGuessRemaining));
-        numGuessesRemaining.setId(5);
+        //numGuessesRemaining = new TextView(this);
+        //numGuessesRemaining.setText(String.valueOf(valueGuessRemaining));
+        //numGuessesRemaining.setId(5);
 
         scoreLabel = new TextView(this);
         scoreLabel.setText("Score: ");
@@ -203,37 +204,39 @@ public class giveMovie extends AppCompatActivity {
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT
         );
-        numGuessesRmainingDetails.addRule(RelativeLayout.BELOW, guessesRemaining.getId());
-        numGuessesRmainingDetails.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        numGuessesRmainingDetails.setMargins(0, 20, 0, 0);
-        giveMovieLayout.addView(numGuessesRemaining, numGuessesRmainingDetails);
+        //numGuessesRmainingDetails.addRule(RelativeLayout.BELOW, guessesRemaining.getId());
+        //numGuessesRmainingDetails.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        //numGuessesRmainingDetails.setMargins(0, 20, 0, 0);
+        //giveMovieLayout.addView(numGuessesRemaining, numGuessesRmainingDetails);
         // Text View - Guesses Made.
         RelativeLayout.LayoutParams guessesMadeDetails =  new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT
         );
         guessesMadeDetails.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        guessesMadeDetails.addRule(RelativeLayout.BELOW, numGuessesRemaining.getId());
+        guessesMadeDetails.addRule(RelativeLayout.BELOW, guessesRemaining.getId());
         guessesMadeDetails.setMargins(0, 20, 0, 0);
         giveMovieLayout.addView(guessesMade, guessesMadeDetails);
 
         setContentView(giveMovieLayout);
 
-        RelativeLayout.LayoutParams scoreViewDetails = new RelativeLayout.LayoutParams(
+        RelativeLayout.LayoutParams scoreLabelDetails = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+        );
+        scoreLabelDetails.setMargins(0, 20, 20, 0);
+        scoreLabelDetails.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        scoreLabelDetails.addRule(RelativeLayout.BELOW, guessesMade.getId());
+        giveMovieLayout.addView(scoreLabel,scoreLabelDetails);
+
+        /*RelativeLayout.LayoutParams scoreViewDetails = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT
         );
         scoreViewDetails.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        scoreViewDetails.addRule(RelativeLayout.BELOW, guessesMade.getId());
-        giveMovieLayout.addView(scoreLabel,scoreViewDetails);
-
-        RelativeLayout.LayoutParams scoreValueDetails = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
-        );
-        scoreValueDetails.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        scoreValueDetails.addRule(RelativeLayout.ALIGN_PARENT_END, scoreLabel.getId());
-        giveMovieLayout.addView(scoreView,scoreValueDetails);
+        scoreViewDetails.addRule(RelativeLayout.BELOW, scoreLabel.getId());
+        scoreViewDetails.setMargins(20, 20, 0, 0);
+        giveMovieLayout.addView(scoreView,scoreViewDetails);*/
 
         RelativeLayout.LayoutParams successMessageDetails = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
@@ -241,7 +244,7 @@ public class giveMovie extends AppCompatActivity {
         );
 
 
-        successMessageDetails.addRule(RelativeLayout.BELOW, enterGuess.getId());
+        successMessageDetails.addRule(RelativeLayout.BELOW, proceed.getId());
         successMessageDetails.addRule(RelativeLayout.CENTER_HORIZONTAL);
         giveMovieLayout.addView(successMessage,successMessageDetails);
 
@@ -250,7 +253,7 @@ public class giveMovie extends AppCompatActivity {
                 RelativeLayout.LayoutParams.WRAP_CONTENT
         );
 
-        proceedDetails.addRule(RelativeLayout.RIGHT_OF, successMessage.getId());
+        proceedDetails.addRule(RelativeLayout.BELOW, scoreLabel.getId());
         proceedDetails.addRule(RelativeLayout.CENTER_HORIZONTAL);
         giveMovieLayout.addView(proceed, proceedDetails);
         //proceed.setVisibility(View.INVISIBLE);
