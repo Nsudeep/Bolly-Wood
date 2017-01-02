@@ -10,6 +10,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.content.Context;
+import android.util.Log;
+
+import java.util.ArrayList;
 
 public class userInputActivity extends AppCompatActivity {
 
@@ -25,11 +29,15 @@ public class userInputActivity extends AppCompatActivity {
     private String guessesMadeString = "Incorrect Guesses:";
     private TextView incorrectGuesses;
     private char userLetter;
+    private static final String TAG = "userInputActivityLogs";
+
+    private hangman ai;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_user_input);
-        RelativeLayout userInputLayout = new RelativeLayout(this);
+        final RelativeLayout userInputLayout = new RelativeLayout(this);
 
         movieInput = new EditText(this);
         movieInput.setId(20);
@@ -44,6 +52,7 @@ public class userInputActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 maskedMovie = movieInput.getText().toString().toUpperCase();
+                ai = new hangman(maskedMovie, userInputLayout.getContext());
                 System.out.println("masked movie is " + maskedMovie);
                 maskedMovieText.setText(maskedMovie);
                 movieInput.setVisibility(View.INVISIBLE);
@@ -61,8 +70,9 @@ public class userInputActivity extends AppCompatActivity {
         continueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userLetter = 'A';
-                aiDecisionText.setText("The AI chose letter"+ userLetter +"  and enter positions. Press N for an incorrect guess");
+                userLetter = ai.nextGuess();
+                aiDecisionText.setText("The AI chose letter "+ userLetter +" and enter positions. Press N for an incorrect guess");
+                continueButton.setVisibility(View.INVISIBLE);
                 userPositionInput.setVisibility(View.VISIBLE);
                 positionAccepted.setVisibility(View.VISIBLE);
                 return;
@@ -82,24 +92,32 @@ public class userInputActivity extends AppCompatActivity {
                 int len = strArr.length;
                 int[] intArray = new int[len];
                 int num, flag=0;
+                ArrayList pos = new ArrayList();
+                boolean isPresent = true;
 
-                if((strArr[0].charAt(0) == 'N') || (strArr[0].charAt(0) == 'n'))
+                /*if((strArr[0].charAt(0) == 'N') || (strArr[0].charAt(0) == 'n'))
                 {
                     flag = 1;
                     char incorrectGuess = 'B';
                     guessesMadeString += incorrectGuess;
                     incorrectGuesses.setText(guessesMadeString);
-                }
+                }*/
 
-                for(int i = 0; i < len && flag== 0; i++) {
-
+                for(int i = 0; i < strArr.length; i++) {
+                    if(i == 0 && (strArr[i].charAt(0) == 'N' || strArr[i].charAt(0) == 'n')) {
+                        isPresent = false;
+                        //ai.feedback(false, pos);
+                        break;
+                    }
                     intArray[i] = Integer.parseInt(strArr[i]);
                     num = intArray[i];
                     StringBuilder mm = new StringBuilder(maskedMovie);
+                    pos.add(num-1);
                     mm.setCharAt(num-1, userLetter);
                     maskedMovie = mm.toString();
                 }
-
+                Log.i(TAG, "The position list is: " + pos.toString());
+                ai.feedback(isPresent, pos);
                 maskedMovieText.setText(maskedMovie);
 
                 if(maskedMovie.indexOf('_') == -1) {
@@ -109,6 +127,8 @@ public class userInputActivity extends AppCompatActivity {
                 }
 
                 userPositionInput.setText("");
+                userLetter = ai.nextGuess();
+                aiDecisionText.setText("Next guess is "+ userLetter +" and enter positions. Press N for an incorrect guess.");
                 InputMethodManager imm = (InputMethodManager) getSystemService(giveMovie.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);// to hide the keyboard
                 return;

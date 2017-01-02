@@ -23,6 +23,7 @@ public class hangman {
         movieList = new ArrayList();
         evidencePresent = new HashMap();
         evidenceAbsent = new HashSet<Character>();
+        Log.i(TAG, "The given string is " + givenString);
         evidenceAbsent.add('A');
         evidenceAbsent.add('E');
         evidenceAbsent.add('I');
@@ -35,17 +36,24 @@ public class hangman {
                 evidenceAbsent.remove(givenString.charAt(i));
             }
         }
+        Log.i(TAG, "Evidence Present " + evidencePresent.toString());
+        Log.i(TAG, "Evidence Absent " + evidenceAbsent.toString());
         int movieLength = s.length();
 
         // Load the list of movies with length equal to the given movie length.
         AssetManager am = appContext.getAssets();
         String fileName = "movies_" + String.valueOf(movieLength) + ".txt";
+        Log.i(TAG, "Opening " + fileName);
         BufferedReader reader;
         try {
             reader = new BufferedReader(
                 new InputStreamReader(appContext.getAssets().open(fileName)));
             String movieName;
+            //Log.i(TAG, "Following movies match the given movie length:");
+            movieName = reader.readLine();
+            //Log.i(TAG, "The first movie is " + movieName);
             while((movieName = reader.readLine())!=null) {
+                //Log.i(TAG, movieName);
                 movieList.add(movieName);
             }
         }
@@ -69,20 +77,24 @@ public class hangman {
     public int probLetterGivenEvidence(char l) {
         int prob = 0;
         for(int i=0; i<movieList.size(); i++) {
+            //Log.i(TAG, "prob word " + movieList.get(i) + " given evidence for letter " + l + " is " + probEvidenceGivenWord(movieList.get(i).toString()));
+            if(movieList.get(i).toString().indexOf(l) == -1)
+                continue;
             prob += probEvidenceGivenWord(movieList.get(i).toString());
         }
         return prob;
     }
     public char nextGuess() {
-        String letters = "BCDFGHJKLMNPQRSTVWXYZ";
+        String letters = "BCDFGHJKLMNPQRSTVWXYZ0123456789";
         int maxProb = 0;
         int maxIdx = 0;
         int prob;
         char c;
         for(int i=0; i<letters.length(); i++) {
             c = letters.charAt(i);
-            if(evidenceAbsent.contains(c) == false && evidencePresent.keySet().contains(c) == false) {
+            if(evidenceAbsent.contains(c) == false && evidencePresent.containsValue(c) == false) {
                 prob = probLetterGivenEvidence(c);
+                Log.i(TAG, "The prob. of " + c + " = " + prob);
                 if(prob > maxProb) {
                     maxProb = prob;
                     maxIdx = i;
@@ -102,9 +114,12 @@ public class hangman {
                     Log.i(TAG, "Wrong input given by the user, ignoring ...");
                 }
                 else {
-                    evidencePresent.put(i, guess);
+                    evidencePresent.put(pos.get(i), guess);
                 }
             }
         }
+        Log.i(TAG, "After Feedback for letter " + guess);
+        Log.i(TAG, "Evidence Present: " + evidencePresent);
+        Log.i(TAG, "Evidence Absent: " + evidenceAbsent);
     }
 }

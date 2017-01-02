@@ -256,7 +256,7 @@ public class giveMovie extends AppCompatActivity {
         proceedDetails.addRule(RelativeLayout.BELOW, scoreLabel.getId());
         proceedDetails.addRule(RelativeLayout.CENTER_HORIZONTAL);
         giveMovieLayout.addView(proceed, proceedDetails);
-        proceed.setVisibility(View.INVISIBLE);
+        //proceed.setVisibility(View.INVISIBLE);
         //proceed.setVisibility(View.VISIBLE);
     }
     protected String maskMovieName(String movieName, String guessedLetters) {
